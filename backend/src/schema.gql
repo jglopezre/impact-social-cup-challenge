@@ -1,0 +1,43 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Collaborator {
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+  company: String!
+}
+
+type Participant {
+  firstName: String!
+  lastName: String!
+  email: String!
+  tickets: Int!
+}
+
+type Query {
+  collaborators: [Collaborator!]!
+  participants: [Participant!]!
+}
+
+type Mutation {
+  createCollaborator(collaboratorInput: CreateCollaboratorInput!): Collaborator!
+  createParticipant(participantInput: CreateParticipantInput!): Participant!
+}
+
+input CreateCollaboratorInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String = ""
+  company: String!
+}
+
+input CreateParticipantInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  tickets: Int = 0
+}
