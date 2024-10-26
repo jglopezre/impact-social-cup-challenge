@@ -7,8 +7,9 @@ import { join } from 'path';
 import { CollaboratorsModule } from './collaborators/collaborators.module';
 import { ParticipantsModule } from './participants/participants.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
-import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
+import { UserTasksModule } from './user-tasks/user-tasks.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     CollaboratorsModule,
     ParticipantsModule,
     OpportunitiesModule,
-    TasksModule,
+    UsersModule,
+    UserTasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

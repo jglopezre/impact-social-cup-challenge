@@ -1,11 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { OportunityStatus } from './entity';
+import { OpportunityStatus } from './entities/opportunities.entity';
 
 @Injectable()
 export class OpportunitiesService {
-  constructor(@InjectRepository(OportunityStatus) private oportunityStatusRepository: Repository<OportunityStatus>) {}
+  constructor(@InjectRepository(OpportunityStatus) private oportunityStatusRepository: Repository<OpportunityStatus>) {}
+
+  findAll(): Promise<OpportunityStatus[]> {
+    return this.oportunityStatusRepository.find();
+  }
+
+  findOne(id: number): Promise<OpportunityStatus> {
+    return this.oportunityStatusRepository.findOne({
+      where: {
+        id,
+      }
+    })
+  }
 
   async onModuleInit() {
     let statuses = await this.oportunityStatusRepository.find();

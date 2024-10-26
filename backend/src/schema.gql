@@ -2,29 +2,80 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  username: String!
+  password: String!
+  userTasks: [UserTask!]!
+}
+
+type UserTask {
+  id: String!
+  user: User!
+  title: String!
+  description: String
+  createDate: String!
+  limitDate: String!
+  status: Boolean!
+  isDeleted: Boolean!
+  participant: Participant
+  collaborator: Collaborator
+}
+
+type Participant {
+  id: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  tickets: Int!
+  isDeleted: Boolean!
+  opportunityStatus: OpportunityStatus!
+  userTask: [UserTask!]!
+}
+
+type OpportunityStatus {
+  id: Int!
+  name: String!
+  participants: [Participant!]!
+  collaborators: [Collaborator!]!
+}
+
 type Collaborator {
+  id: String!
   firstName: String!
   lastName: String!
   email: String!
   phone: String!
   company: String!
-}
-
-type Participant {
-  firstName: String!
-  lastName: String!
-  email: String!
-  tickets: Int!
+  isDeleted: Boolean!
+  opportunityStatus: OpportunityStatus!
+  userTask: [UserTask!]!
 }
 
 type Query {
   collaborators: [Collaborator!]!
+  collaborator(id: String!): Collaborator!
+  participant(id: String!): Participant!
   participants: [Participant!]!
+  opportunities: [OpportunityStatus!]!
+  opportunity(id: Int!): OpportunityStatus!
+  user(id: String!): User!
+  users: [User!]!
+  userTasks: [UserTask!]!
+  userTask(id: String!): UserTask!
 }
 
 type Mutation {
   createCollaborator(collaboratorInput: CreateCollaboratorInput!): Collaborator!
   createParticipant(participantInput: CreateParticipantInput!): Participant!
+  createUser(userInput: CreateUserInput!): User!
+  createUserTask(createUserTaskInput: CreateUserTaskInput!): UserTask!
+  updateUserTask(updateUserTaskInput: UpdateUserTaskInput!): UserTask!
+  updateStatusUserTask(updateStatusUserTaskInput: UpdateStatusUserTask!): UserTask!
+  removeUserTask(id: String!): UserTask!
 }
 
 input CreateCollaboratorInput {
@@ -39,5 +90,37 @@ input CreateParticipantInput {
   firstName: String!
   lastName: String!
   email: String!
-  tickets: Int = 0
+  tickets: Int!
+}
+
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  username: String!
+  password: String!
+}
+
+input CreateUserTaskInput {
+  userId: String!
+  title: String!
+  description: String
+  limitDate: String!
+  participantId: String
+  collaboratorId: String
+}
+
+input UpdateUserTaskInput {
+  userId: String
+  title: String
+  description: String
+  limitDate: String
+  participantId: String
+  collaboratorId: String
+  id: String!
+}
+
+input UpdateStatusUserTask {
+  id: String!
+  status: Boolean!
 }

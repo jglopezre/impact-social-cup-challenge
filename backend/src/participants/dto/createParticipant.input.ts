@@ -19,10 +19,6 @@ export class CreateParticipantInput {
   @Field()
   email: string
   
-  @Field((type) => Int, {nullable: true, defaultValue: 0})
-  tickets?: number
-
-  /* @MaxLength(1)
-  @Field((type) => Int, {nullable: true, defaultValue: 1})
-  oportunityStatus?: number */
+  @Field((type) => Int)
+  tickets: number
 }
