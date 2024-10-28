@@ -1,8 +1,9 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ParticipantsService } from './participants.service';
 import { Participant } from './entities/participant.entity';
 import { CreateParticipantInput } from './dto/createParticipant.input';
-import { OpportunityStatus } from 'src/opportunities/entities/opportunities.entity';
+import { UpdateParticipantInput } from './dto/update-participant.input';
+import { DeleteParticipantInput } from './dto/delete-participant.input';
 
 @Resolver(() => Participant)
 export class ParticipantsResolver {
@@ -21,5 +22,15 @@ export class ParticipantsResolver {
   @Mutation((returns) => Participant)
   createParticipant(@Args('participantInput') participantInput: CreateParticipantInput) {
     return this.participantsService.create(participantInput);
+  }
+
+  @Mutation((returns) => Participant)
+  updateParticipant(@Args('participantInput') participantInput: UpdateParticipantInput) {
+    return this.participantsService.updateOne(participantInput.id, participantInput);
+  }
+
+  @Mutation((returns) => Participant)
+  deleteParticipant(@Args('participantInput') participantInput: DeleteParticipantInput) {
+    return this.participantsService.deleteOne(participantInput.id, participantInput);
   }
 }

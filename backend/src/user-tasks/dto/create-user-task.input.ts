@@ -20,8 +20,8 @@ export class CreateUserTaskInput {
   limitDate: string
 
   @Field({ nullable: true })
-  participantId?: string | null
+  participantId?: string
 
   @Field({ nullable: true })
-  collaboratorId?: string | null
+  collaboratorId?: string
 }

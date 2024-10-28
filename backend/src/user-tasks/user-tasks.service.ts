@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { Participant } from 'src/participants/entities/participant.entity';
 import { Collaborator } from 'src/collaborators/entities/collaborators.entitiy';
 import { User } from 'src/users/entities/user.entity';
-import { UpdateStatusUserTask } from './dto/update-status-user-task.input';
+import { DeleteUserTaskInput } from './dto/delete-user-task.input';
 
 @Injectable()
 export class UserTasksService {
@@ -38,7 +38,7 @@ export class UserTasksService {
       ? await this.collaboratorRepository.findOne({ where : { id: userTaskInput.collaboratorId}})
       : null;
     
-    const createDate = new Date().getUTCDate().toString();
+    const createDate = new Date().toISOString();
     console.log(createDate);
 
     const status = true;
@@ -56,27 +56,97 @@ export class UserTasksService {
   }
 
   findAll(): Promise<UserTask[]> {
-    return this.userTaskRepository.find({ relations: ['user', 'participant', 'collaborator']});
+    return this.userTaskRepository.find({
+      where: {
+        isDeleted: false,
+      },
+      relations: ['user', 'participant', 'collaborator']
+    });
   }
 
   findOne(id: string): Promise<UserTask> {
     return this.userTaskRepository.findOne({
-      where: { id },
-      relations: ['user'],
+      where: {
+        id,
+        isDeleted: false
+      },
+      relations: ['user', 'participant', 'collaborator'],
     })
   }
 
-  update(id: string, updateUserTaskInput: UpdateUserTaskInput) {
-    return `This action updates a #${id} userTask`;
+  async updateOne(id: string, updateUserTaskInput: UpdateUserTaskInput): Promise<UserTask> {
+    const userTask = await this.userTaskRepository.findOne({
+      where: {
+        id,
+        isDeleted: false,
+      },
+      relations: ['user', 'participant', 'collaborator'],
+    })
+
+    if(!userTask) return null
+
+    const relationatedData = await this.getUserAndParticipantAndCollaborator(
+      updateUserTaskInput.userId,
+      updateUserTaskInput.participantId,
+      updateUserTaskInput.collaboratorId,
+    );
+
+    Object.assign(updateUserTaskInput, relationatedData);
+
+    const {
+      collaboratorId,
+      participantId,
+      ...cleanedObject
+    } = updateUserTaskInput;
+
+    console.log(cleanedObject);
+
+    await this.userTaskRepository.update(id, cleanedObject)
+
+    return this.userTaskRepository.findOne({
+      where: { id },
+      relations: ['user', 'participant', 'collaborator'],
+    })
   }
 
-  async updateStatus(id: string, updateStatusUserTaskInput: UpdateStatusUserTask): Promise<UserTask> {
-    const updateResult = await this.userTaskRepository.update(id, updateStatusUserTaskInput)
-    console.log(updateResult);
-    return await this.userTaskRepository.findOne({ where: { id: updateStatusUserTaskInput.id }})
+  async deleteOne(id: string, userTaskInput: DeleteUserTaskInput): Promise<UserTask> {
+    const userTask = await this.userTaskRepository.findOne({
+      where: {
+        id,
+        isDeleted: false,
+      },
+      relations: ['user', 'participant', 'collaborator'],
+    });
+
+    if(!userTask) return null;
+
+    userTask.isDeleted = userTaskInput.delete;
+    return this.userTaskRepository.save(userTask);
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} userTask`;
+  private async getUserAndParticipantAndCollaborator(
+    userId: string,
+    participantId: string,
+    collaboratorId: string,
+  ) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    })
+
+    const participant = participantId
+      ? await this.participantRepository.findOne({
+        where: { id: participantId },
+        relations: ['opportunityStatus'],
+      })
+      : null;
+
+    const collaborator = collaboratorId
+    ? await this.collaboratorRepository.findOne({
+      where: { id: collaboratorId },
+      relations: ['opportunityStatus'],
+    })
+    : null;
+
+    return { user, participant, collaborator}
   }
 }

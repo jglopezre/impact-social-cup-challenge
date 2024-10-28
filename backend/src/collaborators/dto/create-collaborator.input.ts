@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql"
-import { IsEmail, MaxLength, MinLength } from "class-validator"
+import { IsEmail, IsString, MaxLength, MinLength } from "class-validator"
 
 @InputType()
 export class CreateCollaboratorInput {
@@ -17,11 +17,12 @@ export class CreateCollaboratorInput {
   @Field()
   email: string
 
-  @Field({nullable: true, defaultValue:""})
+  @IsString()
+  @Field()
   phone: string
 
   @MinLength(2)
-  @MaxLength(20)
+  @MaxLength(40)
   @Field()
   company: string
 }

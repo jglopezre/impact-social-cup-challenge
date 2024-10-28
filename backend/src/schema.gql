@@ -56,8 +56,8 @@ type Collaborator {
 }
 
 type Query {
-  collaborators: [Collaborator!]!
   collaborator(id: String!): Collaborator!
+  collaborators: [Collaborator!]!
   participant(id: String!): Participant!
   participants: [Participant!]!
   opportunities: [OpportunityStatus!]!
@@ -70,20 +70,38 @@ type Query {
 
 type Mutation {
   createCollaborator(collaboratorInput: CreateCollaboratorInput!): Collaborator!
+  updateCollaborator(collaboratorInput: UpdateCollaboratorInput!): Collaborator!
+  deleteCollaborator(colaboratorInput: DeleteCollaboratorInput!): Collaborator!
   createParticipant(participantInput: CreateParticipantInput!): Participant!
+  updateParticipant(participantInput: UpdateParticipantInput!): Participant!
+  deleteParticipant(participantInput: DeleteParticipantInput!): Participant!
   createUser(userInput: CreateUserInput!): User!
   createUserTask(createUserTaskInput: CreateUserTaskInput!): UserTask!
-  updateUserTask(updateUserTaskInput: UpdateUserTaskInput!): UserTask!
-  updateStatusUserTask(updateStatusUserTaskInput: UpdateStatusUserTask!): UserTask!
-  removeUserTask(id: String!): UserTask!
+  updateUserTask(userTaskInput: UpdateUserTaskInput!): UserTask!
+  deleteUserTask(userTaskInput: DeleteUserTaskInput!): UserTask!
 }
 
 input CreateCollaboratorInput {
   firstName: String!
   lastName: String!
   email: String!
-  phone: String = ""
+  phone: String!
   company: String!
+}
+
+input UpdateCollaboratorInput {
+  firstName: String
+  lastName: String
+  email: String
+  phone: String
+  company: String
+  id: String!
+  opportunityStatus: Int
+}
+
+input DeleteCollaboratorInput {
+  id: String!
+  delete: Boolean!
 }
 
 input CreateParticipantInput {
@@ -91,6 +109,20 @@ input CreateParticipantInput {
   lastName: String!
   email: String!
   tickets: Int!
+}
+
+input UpdateParticipantInput {
+  firstName: String
+  lastName: String
+  email: String
+  tickets: Int
+  id: String!
+  opportunityStatus: Int
+}
+
+input DeleteParticipantInput {
+  id: String!
+  delete: Boolean!
 }
 
 input CreateUserInput {
@@ -118,9 +150,10 @@ input UpdateUserTaskInput {
   participantId: String
   collaboratorId: String
   id: String!
+  status: Boolean = false
 }
 
-input UpdateStatusUserTask {
+input DeleteUserTaskInput {
   id: String!
-  status: Boolean!
+  delete: Boolean!
 }

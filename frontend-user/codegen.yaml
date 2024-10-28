@@ -1,0 +1,10 @@
+schema: http://localhost:3000/graphql  # Aquí especificas la URL de tu servidor GraphQL
+documents: "src/**/*.graphql"  # La ubicación donde guardas tus queries y mutaciones
+generates:
+  src/generated/graphql.tsx:  # Archivo donde se generarán los tipos y hooks
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHooks: true  # Habilita la generación de hooks para React Apollo

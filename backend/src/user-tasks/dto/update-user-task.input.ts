@@ -1,4 +1,4 @@
-import { IsString, MaxLength } from 'class-validator';
+import { IsBoolean, IsString, MaxLength } from 'class-validator';
 import { CreateUserTaskInput } from './create-user-task.input';
 import { InputType, Field, PartialType } from '@nestjs/graphql';
 
@@ -8,4 +8,8 @@ export class UpdateUserTaskInput extends PartialType(CreateUserTaskInput) {
   @MaxLength(26)
   @Field()
   id: string;
+
+  @IsBoolean()
+  @Field((type) => Boolean, { nullable: true, defaultValue: false })
+  status?: boolean
 }

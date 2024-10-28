@@ -1,0 +1,11 @@
+mutation CreateNewParticipant($participantInput: CreateParticipantInput!) {
+  createParticipant(participantInput: $participantInput) {
+    id
+  }
+}
+
+mutation CreateNewCollaborator($collaboratorInput: CreateCollaboratorInput!) {
+  createCollaborator(collaboratorInput: $collaboratorInput) {
+    id
+  }
+}
