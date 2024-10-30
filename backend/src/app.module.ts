@@ -10,6 +10,7 @@ import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { UserTasksModule } from './user-tasks/user-tasks.module';
+import { UserAuthModule } from './user-auth/user-auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UserTasksModule } from './user-tasks/user-tasks.module';
     OpportunitiesModule,
     UsersModule,
     UserTasksModule,
+    UserAuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

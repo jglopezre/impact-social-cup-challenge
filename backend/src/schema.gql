@@ -55,6 +55,11 @@ type Collaborator {
   userTask: [UserTask!]!
 }
 
+type UserAuth {
+  user: User!
+  token: String!
+}
+
 type Query {
   collaborator(id: String!): Collaborator!
   collaborators: [Collaborator!]!
@@ -79,6 +84,8 @@ type Mutation {
   createUserTask(createUserTaskInput: CreateUserTaskInput!): UserTask!
   updateUserTask(userTaskInput: UpdateUserTaskInput!): UserTask!
   deleteUserTask(userTaskInput: DeleteUserTaskInput!): UserTask!
+  logoutUser(userToken: LogoutUserInput!): String!
+  loginUser(userData: LoginUserInput!): UserAuth!
 }
 
 input CreateCollaboratorInput {
@@ -156,4 +163,13 @@ input UpdateUserTaskInput {
 input DeleteUserTaskInput {
   id: String!
   delete: Boolean!
+}
+
+input LogoutUserInput {
+  token: String!
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
 }
